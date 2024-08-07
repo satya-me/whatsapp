@@ -180,7 +180,7 @@
                     </div>
                 </div>
             </nav>
-            <!-- Navbar End --
+            <!-- Navbar End -->
 
 
             @yield('content')
