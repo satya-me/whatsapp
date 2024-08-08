@@ -23,10 +23,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // Session
 Route::get('/get/all/session', [SessionController::class, 'GetSession'])->name('GetSession');
+Route::get('/get/me/session/{my_session?}', [SessionController::class, 'GetMe'])->name('GetMe');
 
 
 // Message
+Route::post('/send/message', [MessageController::class, 'MessageChecker'])->name('MMSChecker');
 Route::post('/send/text', [MessageController::class, 'SendText'])->name('SendText');
 Route::post('/send/image', [MessageController::class, 'SendImage'])->name('SendImage');
 Route::post('/send/file', [MessageController::class, 'SendFile'])->name('SendFile');
-Route::post('/send/message', [MessageController::class, 'MMSChecker'])->name('MMSChecker');

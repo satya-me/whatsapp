@@ -8,9 +8,35 @@ use Illuminate\Support\Facades\Http;
 class MessageController extends Controller
 {
 
-    public function MMSChecker(Request $request)
+    public function MessageChecker(Request $request)
     {
+        // Retrieve the values from the request
+        $chatId = $request->input('chatId');
+        $session = $request->input('session');
+        $body = $request->input('body');
+        $image = $request->file('image');
 
+
+
+        // Check if an image was uploaded
+        if ($request->hasFile('image')) {
+            // Call the method to handle the file
+            $fileRequest = new Request([
+                'chatId' => $chatId,
+                'session' => $session,
+                'body' => $body,
+                'image' => $image,
+            ]);
+            return $this->SendFile($fileRequest);
+        } else {
+            // Call the method to handle the text
+            $textRequest = new Request([
+                'chatId' => $chatId,
+                'session' => $session,
+                'body' => $body,
+            ]);
+            return $this->someFunText($textRequest);
+        }
     }
 
     public function SendText(Request $request)
@@ -19,7 +45,7 @@ class MessageController extends Controller
             ->withHeaders([
                 'Content-Type' => 'application/json',
             ])
-            ->post('http://192.168.1.9:3000/api/sendText', [
+            ->post(env('BASE_URL') . '/api/sendText', [
                 'chatId' => '917568019312@c.us',
                 'text' => 'Hi there! Pushkar',
                 'session' => 'satyajit',
@@ -33,7 +59,7 @@ class MessageController extends Controller
             ->withHeaders([
                 'Content-Type' => 'application/json',
             ])
-            ->post('http://192.168.1.9:3000/api/sendImage', [
+            ->post(env('BASE_URL') . '/api/sendImage', [
                 'chatId' => '917568019312@c.us',
                 'file' => [
                     'mimetype' => 'image/jpeg',
@@ -48,21 +74,46 @@ class MessageController extends Controller
     }
     public function SendFile(Request $request)
     {
+        return $request;
         $response = Http::accept('application/json')
             ->withHeaders([
                 'Content-Type' => 'application/json',
             ])
-            ->post('http://192.168.1.9:3000/api/sendFile', [
+            ->post(env('BASE_URL') . '/api/sendFile', [
                 'chatId' => '917568019312@c.us',
                 'file' => [
                     'mimetype' => 'image/jpeg',
                     'filename' => 'filename.jpg',
-                    'url' => 'https://github.com/devlikeapro/waha/raw/core/examples/dev.likeapro.jpg',
+                    'data' => 'https://github.com/devlikeapro/waha/raw/core/examples/dev.likeapro.jpg',
                 ],
                 'caption' => 'string',
                 'session' => 'satyajit',
             ]);
 
         $data = $response->json();
+    }
+
+
+    public function imageToBase64($imagePath)
+    {
+        // Check if the file exists
+        if (!file_exists($imagePath)) {
+            return "File does not exist.";
+        }
+
+        // Get the file's MIME type
+        $mimeType = mime_content_type($imagePath);
+
+        // Read the file's contents
+        $imageData = file_get_contents($imagePath);
+
+        // Encode the data to Base64
+        $base64Image = base64_encode($imageData);
+
+        // Return the Base64-encoded image with MIME type prefix
+        return [
+            'mimeType' => $mimeType,
+            'string' => $base64Image
+        ];
     }
 }
