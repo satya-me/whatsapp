@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class ContactGroup extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'group_id',
+        'contact_id',
+    ];
 }
