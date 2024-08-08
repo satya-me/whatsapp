@@ -69,8 +69,12 @@
                         </a>
                     </li>
 
-                    <li class="menu-item {{ \Route::currentRouteName() == 'group_contact' ? 'active' : '' }}">
-                        <a href="{{ route('group_contact') }}" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Contacts Groups</a>
+                    <li class="menu-item {{ \Route::currentRouteName() == 'contacts' ? 'active' : '' }}">
+                        <a href="{{ route('contacts') }}" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Contacts Groups</a>
+                    </li>
+
+                    <li class="menu-item {{ \Route::currentRouteName() == 'contact_view' ? 'active' : '' }}">
+                        <a href="{{ route('contact_view') }}" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Contacts List</a>
                     </li>
 
                     <li class="menu-item {{ \Route::currentRouteName() == 'send_message' ? 'active' : '' }}">
